@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -53,6 +53,124 @@
         const response = await fetch("/quote");
         const data = await response.json();
         document.getElementById("quote").innerText = data.quote;
+      }
+    </script>
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My WebApp</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f4f7f9;
+        color: #333;
+      }
+      header {
+        background: #0078d7;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      nav {
+        background: #005a9e;
+        padding: 10px;
+        text-align: center;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      .container {
+        padding: 20px;
+      }
+      .card {
+        background: white;
+        padding: 20px;
+        margin: 10px auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+      }
+      button {
+        background: #0078d7;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin-top: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background: #005a9e;
+      }
+      footer {
+        text-align: center;
+        padding: 15px;
+        background: #f1f1f1;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🚀 Welcome to My WebApp</h1>
+      <p>Deployed on Azure App Service</p>
+    </header>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="container">
+      <div class="card" id="about">
+        <h2>About Me</h2>
+        <p>
+          Hello! I’m learning how to deploy apps on Microsoft Azure. This is a
+          sample webpage that shows HTML, CSS, and JavaScript in action.
+        </p>
+      </div>
+
+      <div class="card" id="projects">
+        <h2>My Projects</h2>
+        <ul>
+          <li>✅ Smart Farming App</li>
+          <li>✅ Blog Generator</li>
+          <li>✅ CNC Robot</li>
+          <li>✅ Skin Disease Classification</li>
+        </ul>
+      </div>
+
+      <div class="card" id="contact">
+        <h2>Contact</h2>
+        <p>
+          Email: <a href="mailto:someone@example.com">someone@example.com</a>
+        </p>
+        <button onclick="showMessage()">Click Me</button>
+        <p id="msg"></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 My WebApp | Built with ❤️ and deployed on Azure</p>
+    </footer>
+
+    <script>
+      function showMessage() {
+        document.getElementById("msg").innerText =
+          "Thanks for clicking! 🎉 This is a JavaScript event in action.";
       }
     </script>
   </body>
