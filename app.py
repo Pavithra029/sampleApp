@@ -1,25 +1,25 @@
-from flask import Flask, render_template, jsonify
-import random
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-quotes = [
-    "Believe you can and you're halfway there.",
-    "Push yourself, because no one else is going to do it for you.",
-    "Great things never come from comfort zones.",
-    "Dream it. Wish it. Do it.",
-    "Success doesn’t just find you. You have to go out and get it."
-]
+tasks = []  # in-memory storage (you can use DB later)
 
 @app.route("/")
-def home():
-    return render_template("index.html")
+def index():
+    return render_template("index.html", tasks=tasks)
 
-@app.route("/quote")
-def get_quote():
-    return jsonify({"quote": random.choice(quotes)})
+@app.route("/add", methods=["POST"])
+def add():
+    task = request.form.get("task")
+    if task:
+        tasks.append(task)
+    return redirect("/")
+
+@app.route("/delete/<int:index>")
+def delete(index):
+    if 0 <= index < len(tasks):
+        tasks.pop(index)
+    return redirect("/")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-
+    app.run(debug=True)
