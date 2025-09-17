@@ -60,118 +60,433 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My WebApp</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Beautiful TODO — My Tasks</title>
     <style>
+      :root {
+        --bg1: #8ec5fc;
+        --bg2: #e0c3fc;
+        --card: rgba(255, 255, 255, 0.85);
+        --muted: #6b7280;
+        --accent: #7c3aed;
+        --success: #10b981;
+        --danger: #ef4444;
+        --glass: rgba(255, 255, 255, 0.6);
+      }
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: Arial, sans-serif;
+        min-height: 100vh;
         margin: 0;
-        padding: 0;
-        background: #f4f7f9;
-        color: #333;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg, var(--bg1), var(--bg2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
+
+      .app {
+        width: 100%;
+        max-width: 760px;
+        background: linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0.35)
+        );
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(12, 15, 30, 0.2);
+        backdrop-filter: blur(8px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+
       header {
-        background: #0078d7;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--accent), #5b21b6);
         color: white;
-        padding: 20px;
-        text-align: center;
+        font-weight: 700;
+        font-size: 22px;
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.28);
       }
-      nav {
-        background: #005a9e;
-        padding: 10px;
-        text-align: center;
+      h1 {
+        margin: 0;
+        font-size: 20px;
       }
-      nav a {
-        color: white;
-        margin: 0 15px;
-        text-decoration: none;
-        font-weight: bold;
+      p.lead {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
       }
-      nav a:hover {
-        text-decoration: underline;
+
+      .add-area {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+        margin-bottom: 16px;
       }
-      .container {
-        padding: 20px;
+      .input {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        outline: none;
+        transition: box-shadow 0.18s ease, transform 0.12s ease;
       }
-      .card {
-        background: white;
-        padding: 20px;
-        margin: 10px auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
+      .input:focus {
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
+        transform: translateY(-1px);
       }
-      button {
-        background: #0078d7;
+      .btn {
+        background: var(--accent);
         color: white;
         border: none;
-        padding: 10px 15px;
-        margin-top: 10px;
+        padding: 0 14px;
+        border-radius: 10px;
+        min-width: 54px;
         cursor: pointer;
-        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
       }
-      button:hover {
-        background: #005a9e;
+      .btn:active {
+        transform: translateY(1px);
       }
-      footer {
+
+      .stats {
+        display: flex;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .item {
+        background: var(--card);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: space-between;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        box-shadow: 0 6px 12px rgba(16, 24, 40, 0.04);
+        transition: transform 0.12s ease, opacity 0.12s ease;
+      }
+      .item .left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+      }
+      .checkbox {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        background: white;
+      }
+      .title {
+        font-size: 15px;
+        margin: 0;
+      }
+      .title.small {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .complete .title {
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .complete .checkbox {
+        background: linear-gradient(135deg, #bbf7d0, #6ee7b7);
+        border: none;
+      }
+
+      .delete {
+        background: transparent;
+        border: none;
+        color: var(--danger);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+      }
+      .filter {
+        display: flex;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .chip {
+        background: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .chip.active {
+        background: linear-gradient(90deg, #ede9fe, #f3e8ff);
+        border-color: rgba(124, 58, 237, 0.12);
+      }
+
+      .empty {
         text-align: center;
-        padding: 15px;
-        background: #f1f1f1;
-        margin-top: 20px;
+        color: var(--muted);
+        padding: 26px 12px;
+        border-radius: 10px;
+        border: 1px dashed rgba(0, 0, 0, 0.06);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      @media (max-width: 520px) {
+        .logo {
+          width: 52px;
+          height: 52px;
+        }
+        .add-area {
+          flex-direction: column;
+        }
+        .btn {
+          width: 100%;
+        }
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>🚀 Welcome to My WebApp</h1>
-      <p>Deployed on Azure App Service</p>
-    </header>
+    <div class="app" role="application">
+      <header>
+        <div class="logo">TO</div>
+        <div>
+          <h1>Beautiful TODO</h1>
+          <p class="lead">
+            Add tasks, mark done, delete — your simple productivity hub
+          </p>
+        </div>
+      </header>
 
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
+      <section aria-labelledby="add" class="controls">
+        <div class="add-area">
+          <input
+            id="newTask"
+            class="input"
+            placeholder="Add a new task & press Enter"
+            aria-label="New task"
+          />
+          <button id="addBtn" class="btn" title="Add task">Add</button>
+        </div>
+        <div class="stats">
+          <div id="total">0 tasks</div>
+          <div id="remaining">0 remaining</div>
+        </div>
+        <div class="filter" role="tablist">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="active">Active</button>
+          <button class="chip" data-filter="done">Completed</button>
+        </div>
+      </section>
 
-    <div class="container">
-      <div class="card" id="about">
-        <h2>About Me</h2>
-        <p>
-          Hello! I’m learning how to deploy apps on Microsoft Azure. This is a
-          sample webpage that shows HTML, CSS, and JavaScript in action.
-        </p>
-      </div>
+      <main>
+        <ul id="todoList" class="list" aria-live="polite"></ul>
+        <div id="empty" class="empty" hidden>
+          <p><strong>No tasks yet</strong></p>
+          <p>Add your first task using the input above ✨</p>
+        </div>
+      </main>
 
-      <div class="card" id="projects">
-        <h2>My Projects</h2>
-        <ul>
-          <li>✅ Smart Farming App</li>
-          <li>✅ Blog Generator</li>
-          <li>✅ CNC Robot</li>
-          <li>✅ Skin Disease Classification</li>
-        </ul>
-      </div>
-
-      <div class="card" id="contact">
-        <h2>Contact</h2>
-        <p>
-          Email: <a href="mailto:someone@example.com">someone@example.com</a>
-        </p>
-        <button onclick="showMessage()">Click Me</button>
-        <p id="msg"></p>
-      </div>
+      <footer>
+        <div>Saved locally in your browser</div>
+        <div><button id="clearAll" class="chip">Clear All</button></div>
+      </footer>
     </div>
 
-    <footer>
-      <p>&copy; 2025 My WebApp | Built with ❤️ and deployed on Azure</p>
-    </footer>
-
     <script>
-      function showMessage() {
-        document.getElementById("msg").innerText =
-          "Thanks for clicking! 🎉 This is a JavaScript event in action.";
+      // Simple TODO app with localStorage persistence
+      const newTaskInput = document.getElementById("newTask");
+      const addBtn = document.getElementById("addBtn");
+      const listEl = document.getElementById("todoList");
+      const emptyEl = document.getElementById("empty");
+      const totalEl = document.getElementById("total");
+      const remainingEl = document.getElementById("remaining");
+      const chips = document.querySelectorAll(".chip[data-filter]");
+      const clearAllBtn = document.getElementById("clearAll");
+
+      let todos = JSON.parse(localStorage.getItem("beautiful_todos") || "[]");
+      let filter = "all";
+
+      function save() {
+        localStorage.setItem("beautiful_todos", JSON.stringify(todos));
       }
+
+      function render() {
+        listEl.innerHTML = "";
+        const filtered = todos.filter((t) => {
+          if (filter === "all") return true;
+          if (filter === "active") return !t.done;
+          return t.done;
+        });
+
+        if (filtered.length === 0) {
+          emptyEl.hidden = false;
+        } else {
+          emptyEl.hidden = true;
+        }
+
+        filtered.forEach((task) => {
+          const li = document.createElement("li");
+          li.className = "item" + (task.done ? " complete" : "");
+          li.dataset.id = task.id;
+
+          li.innerHTML = `
+          <div class="left">
+            <button class="checkbox" aria-label="toggle complete">${
+              task.done ? "&#10003;" : ""
+            }</button>
+            <div>
+              <p class="title">${escapeHtml(task.text)}</p>
+              <p class="title small">${new Date(
+                task.created
+              ).toLocaleString()}</p>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="delete" title="Delete task">🗑</button>
+          </div>
+        `;
+
+          // events
+          li.querySelector(".checkbox").addEventListener("click", () =>
+            toggleDone(task.id)
+          );
+          li.querySelector(".delete").addEventListener("click", () =>
+            removeTask(task.id)
+          );
+
+          listEl.appendChild(li);
+        });
+
+        totalEl.textContent = `${todos.length} task${
+          todos.length !== 1 ? "s" : ""
+        }`;
+        remainingEl.textContent = `${
+          todos.filter((t) => !t.done).length
+        } remaining`;
+        save();
+      }
+
+      function addTask(text) {
+        const trimmed = text && text.trim();
+        if (!trimmed) return;
+        const task = {
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          text: trimmed,
+          done: false,
+          created: Date.now(),
+        };
+        todos.unshift(task);
+        newTaskInput.value = "";
+        render();
+      }
+
+      function toggleDone(id) {
+        todos = todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
+        render();
+      }
+
+      function removeTask(id) {
+        todos = todos.filter((t) => t.id !== id);
+        render();
+      }
+
+      function clearAll() {
+        if (!todos.length) return;
+        if (confirm("Clear all tasks?")) {
+          todos = [];
+          render();
+        }
+      }
+
+      // small helper
+      function escapeHtml(unsafe) {
+        return unsafe.replace(/[&<"'`=\/]/g, function (s) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+            "/": "&#x2F;",
+            "`": "&#96;",
+            "=": "&#61;",
+          }[s];
+        });
+      }
+
+      // initial render
+      render();
+
+      // events
+      addBtn.addEventListener("click", () => addTask(newTaskInput.value));
+      newTaskInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addTask(newTaskInput.value);
+      });
+
+      chips.forEach((c) =>
+        c.addEventListener("click", () => {
+          chips.forEach((x) => x.classList.remove("active"));
+          c.classList.add("active");
+          filter = c.dataset.filter;
+          render();
+        })
+      );
+
+      clearAllBtn.addEventListener("click", clearAll);
+
+      // accessibility: focus input on load
+      newTaskInput.focus();
+
+      // expose for debugging
+      window.__todos = todos;
     </script>
   </body>
 </html>
